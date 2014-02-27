@@ -1,0 +1,23 @@
+html.unelastic {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+html.unelasticX {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+html.unelasticY {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+html.unelastic body,
+html.unelasticX body,
+html.unelasticY body {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
