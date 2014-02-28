@@ -1,13 +1,35 @@
 (function () {
 
 var debug = 0;
-var mode;
 
-//mode = 'css'
-mode = 'js'
-//mode = 'hybrid'
+var MODES = { 'CSS':    'css',
+              'JS':     'js',
+              'HYBRID': 'hybrid',
+              'NATIVE': 'native' };
 
-var scroll = function(e) {
+var defaultMode = MODES.JS;
+var modeMap = { };
+
+detectMode = function () {
+    var location = document.location;
+    var mode;
+
+    for (var re in modeMap) {
+        if (modeMap.hasOwnProperty(re)) {
+            if ((new RegExp(re)).test(location)) {
+                mode = modeMap[re];
+                if (debug == 1) {
+                    console.log("mode " + mode + " matched with: " + re)
+                }
+                break;
+            }
+        }
+    }
+
+    return (mode || defaultMode);
+};
+
+var scrollHandler = function (e, mode) {
     var stopScroll = false;
     var stopScrollX = false;
     var stopScrollY = false;
@@ -56,7 +78,7 @@ var scroll = function(e) {
         console.log("stopScroll", stopScrollX, stopScrollY);
     }
 
-    if (mode == 'hybrid') {
+    if (mode == MODES.HYBRID) {
         document.documentElement.classList.remove('unelasticX');
         document.documentElement.classList.remove('unelasticY');
 
@@ -69,7 +91,7 @@ var scroll = function(e) {
         }
     }
 
-    if (mode == 'js') {
+    if (mode == MODES.JS) {
         if (stopScrollX || stopScrollY) {
             e.preventDefault();
             e.stopPropagation();
@@ -80,13 +102,20 @@ var scroll = function(e) {
     }
 };
 
-if (mode == 'hybrid' || mode == 'js') {
-    document.addEventListener('mousewheel', scroll, false);
+
+/* main */
+
+var mode = detectMode();
+
+if (mode == MODES.JS || mode == MODES.HYBRID) {
+    document.addEventListener('mousewheel',
+                              function (e) { scrollHandler(e, mode) },
+                              false);
 }
 
 
-if (mode == 'css') {
-    document.addEventListener('DOMContentLoaded', function() {
+if (mode == MODES.CSS) {
+    document.addEventListener('DOMContentLoaded', function () {
         document.documentElement.classList.add('unelastic');
     });
 }
