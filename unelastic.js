@@ -8,7 +8,8 @@ var MODES = { 'CSS':    'css',
               'NATIVE': 'native' };
 
 var defaultMode = MODES.JS;
-var modeMap = { '.*\\.pdf$': MODES.CSS };
+var modeMap = { '.*\\.pdf$': MODES.CSS,
+                'play\\.google\\.com/music/listen': MODES.CSS };
 
 detectMode = function () {
     var location = document.location;
